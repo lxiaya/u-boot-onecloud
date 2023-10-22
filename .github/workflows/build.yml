@@ -3,7 +3,6 @@ name: Build
 on:
   push:
   
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -116,12 +115,12 @@ jobs:
       - name: Release
         run: |
           time="${{ github.event.head_commit.timestamp }}"
-          sha1="${GITHUB_SHA1:0:8}"
-          tag="build $(date +'%Y%m%d-%H%M' -d "$time")"
+          sha="${GITHUB_SHA:0:8}"
+          tag="build-$(date +'%Y%m%d-%H%M' -d "$time")"
           message="Auto-Build $(date +'%Y-%m-%d %H:%M' -d "$time")"
-          hub release create  -t "$GITHUB_SHA1" "$tag" -m "$message" \
+          hub release create  -t "$GITHUB_SHA" "$tag" -m "$message" \
             $(for a in build/*.bin; do echo -a $a; done) \
             -a build/resource.img \
             -a build/eMMC.burn.img
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ github.token }}
