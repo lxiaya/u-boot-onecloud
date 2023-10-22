@@ -116,10 +116,10 @@ jobs:
       - name: Release
         run: |
           time="${{ github.event.head_commit.timestamp }}"
-          sha="${GITHUB_SHA:0:8}"
-          tag="build-$(date +'%Y%m%d-%H%M' -d "$time")"
+          sha1="${GITHUB_SHA1:0:8}"
+          tag="build $(date +'%Y%m%d-%H%M' -d "$time")"
           message="Auto-Build $(date +'%Y-%m-%d %H:%M' -d "$time")"
-          github release create  -t "$GITHUB_SHA" "$tag" -m "$message" \
+          hub release create  -t "$GITHUB_SHA1" "$tag" -m "$message" \
             $(for a in build/*.bin; do echo -a $a; done) \
             -a build/resource.img \
             -a build/eMMC.burn.img
